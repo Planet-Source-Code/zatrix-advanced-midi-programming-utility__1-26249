@@ -1,0 +1,187 @@
+[MODULEINFO]
+ManuID = 41
+DeviceID = 10
+ModelID = 42
+
+[SHORTMSG]
+00 00                   00             
+01 Bn 00 mm Bn 20 00    bank select    
+02 Bn 01 vv             modulation     
+03 Bn 05 vv             port. time     
+04 Bn 07 vv             volume         
+05 Bn 0A vv             pan            
+06 Bn 0B vv             expression     
+07 Bn 40 vv             hold           
+08 Bn 41 vv             portamento     
+09 Bn 42 vv             sostenuto      
+10 Bn 43 vv             soft           
+11 Bn 5B vv             reverb         
+12 Bn 5D vv             chorus         
+13 Bn 63 01 62 08 06 vv vib rate       
+14 Bn 63 01 62 09 06 vv vib dep        
+15 Bn 63 01 62 0A 06 vv vib rate
+16 Bn 63 01 62 20 06 vv cutoff         
+17 Bn 63 01 62 21 06 vv resonance      
+18 Bn 63 01 62 63 06 vv attack         
+19 Bn 63 01 62 64 06 vv decay          
+20 Bn 63 01 62 66 06 vv release        
+21 Cn vv                prg change     
+22 Dn vv                chan press     
+23 En ll mm             pitch bend     
+
+[PARTYPES]
+00  0   00   00      0      0 
+01  1   00   7F      0    127 
+02  1   28   58    -24    +24 semitones
+03  1   00   7F    -64    +63 cent
+04  1   00   07      0      7 rev macro
+05  1   00   07      0      7 char/pre-lpf
+06  1   00   07      0      7 cho macro
+07  2   08   F8  -12.0  +12.0 Hz
+08  1   0E   72    -50    +50 
+09  4 0018 07E8 -100.0 +100.0 cent
+10 16   20   7F     32    127 ascii
+11 16   00   17      0     23 partial res
+12  2   00   7F      0    127 bank/prg
+13  1   00   FF      0    255 Rx
+14  1   00   10      0     16 channel
+15  1   00   01      0      1 1 Mono/Poly
+16  1   00   7F  -9600  +9600 cent
+17  1   00   7F  -10.0  +10.0 Hz
+18  1   00   7F      0    600 cent
+19  1   00   7F      0   2400 cent
+20  1   00   7F      0    100 %
+21  1   00   7F    -64    +63 Rnd, LR
+22  1   00   7F      0    127 note
+23  1   40   58      0     24 semitones
+24  1   00   7F -100.0 +100.0 %
+25  1   00   02      0      2 part mode
+
+[COMMON]
+000 MAS TUN   0 400000  9 04 00 Master tune
+001 MAS VOL   2 400004  1 7F 00 Master volume
+002 MAS KSH   5 400005  2 40 00 Master key-shift
+003 MAS PAN   6 400006 21 40 00 Master pan
+004 PAT NAM   8 400100 10 00 00 Patch name
+005 PAR RES  24 400110 11 00 00 Partial reserve
+006 REV MAC  42 400130  4 04 00 Reverb macro
+007 REV CHR  43 400131  5 04 00 Reverb character
+008 REV PL   44 400132  5 00 00 Reverb PRE-LPF
+009 REV LEV  45 400133  1 40 00 Reverb level
+010 REV TIM  46 400134  1 40 00 Reverb time
+011 REV FB   47 400135  1 00 00 Reverb delay feedback
+012 REV2CHO  48 400136  1 00 00 Reverb send level to chorus
+013 CHO MAC  50 400138  6 02 00 Chorus macro
+014 CHO PL   51 400139  5 00 00 Chorus PRE-LPF
+015 CHO LEV  52 40013A  1 40 00 Chorus level
+016 CHO FB   53 40013B  1 08 00 Chorus feedback
+017 CHO DEL  54 40013C  1 50 00 Chorus delay
+018 CHO RAT  55 40013D  1 03 00 Chorus rate
+019 CHO DEP  56 40013E  1 13 00 Chorus depth
+020 CHO2REV  57 40013F  1 00 00 Chorus send level to reverb
+
+[PARTS]
+000 BANK      0 401n00 12 00 01 Bank
+001 PRG NR    1 401n01 12 00 21 Progr. nr.
+002 CHANNEL   4 401n02 14 00 00 Channel
+003 M/P A D   5 401n13 15 81 00 on/off M/P
+004 KEYSHFT   6 401n16  2 40 00 Key shift
+005 PIT FIN   7 401n17  7 80 00 Pitch fine
+006 VOLUME    8 401n19  1 64 04 Volume
+007 PAN       9 401n1C 21 40 05 Pan
+008 VEL DEP  10 401n1A  1 40 00 Velo depth
+009 VEL OFF  11 401n1B  1 40 00 Velo offset
+010 KRANGEL  12 401n1D 22 00 00 Key range Low
+011 KRANGEH  13 401n1E 22 7F 00 Key range High
+012 CHORUS   14 401n21  1 00 12 Chorus
+013 REVERB   15 401n22  1 28 11 Reverb
+014 VIB RAT  16 401n30  8 40 13 Vib. rate
+015 VIB DEP  17 401n31  8 40 14 Vib. depth
+016 VIB DEL  23 401n37  8 40 15 Vib. delay
+017 CUTOFF   18 401n32  8 40 16 Cutoff
+018 RESONAN  19 401n33  8 40 17 Resonance
+019 ATTACK   20 401n34  8 40 18 Attack
+020 DECAY    21 401n35  8 40 19 Decay
+021 RELEASE  22 401n36  8 40 20 Release
+022 CC1 CNR  38 401n1F  1 10 00 CC1 Ctl Nr
+023 CC2 CNR  39 401n20  1 11 00 CC2 Ctl Nr
+024 SCAL C   26 401n40  3 40 00 Scale tuning C
+025 SCAL C#  27 401n41  3 40 00 Scale tuning C#
+026 SCAL D   28 401n42  3 40 00 Scale tuning D
+027 SCAL D#  29 401n43  3 40 00 Scale tuning D#
+028 SCAL E   30 401n44  3 40 00 Scale tuning E
+029 SCAL F   31 401n45  3 40 00 Scale tuning F
+030 SCAL F#  32 401n46  3 40 00 Scale tuning F#
+031 SCAL G   33 401n47  3 40 00 Scale tuning G
+032 SCAL G#  34 401n48  3 40 00 Scale tuning G#
+033 SCAL A   35 401n49  3 40 00 Scale tuning A
+034 SCAL A#  36 401n4A  3 40 00 Scale tuning A#
+035 SCAL B   37 401n4B  3 40 00 Scale tuning B
+036 RX1 0/1   2 401n03 13 FF 00 Rx1. ...0/1
+037 RX2 0/1   3 401n04 13 FF 00 Rx2. ...0/1
+038 M PITCH  40 402n00  2 40 00 Mod Pitch Ctl
+039 M CUTOF  41 402n01 16 40 00 Mod TVF Cutoff
+040 M AMPLI  42 402n02 24 40 00 Mod Amplitude Ctl
+041 M L1 RC  44 402n03 17 40 00 Mod LFO1 Rate Ctl
+042 M L1 PD  45 402n04 18 0A 00 Mod LFO1 Pitch Depth
+043 M L1 FD  46 402n05 19 00 00 Mod LFO1 TVF Depth
+044 M L1 AD  47 402n06 20 00 00 Mod LFO1 TVA Depth
+045 M L2 RC  48 402n07 17 40 00 Mod LFO2 Rate Ctl
+046 M L2 PD  49 402n08 18 00 00 Mod LFO2 Pitch Depth
+047 M L2 FD  50 402n09 19 00 00 Mod LFO2 TVF Depth
+048 M L2 AD  51 402n0A 20 00 00 Mod LFO2 TVA Depth
+049 B PITCH  52 402n10 23 42 00 Bnd Pitch Ctl
+050 B CUTOF  53 402n11 16 40 00 Bnd TVF Cutoff
+051 B AMPLI  54 402n12 24 40 00 Bnd Amplitude Ctl
+052 B L1 RC  56 402n13 17 40 00 Bnd LFO1 Rate Ctl
+053 B L1 PD  57 402n14 18 00 00 Bnd LFO1 Pitch Depth
+054 B L1 FD  58 402n15 19 00 00 Bnd LFO1 TVF Depth
+055 B L1 AD  59 402n16 20 00 00 Bnd LFO1 TVA Depth
+056 B L2 RC  60 402n17 17 40 00 Bnd LFO2 Rate Ctl
+057 B L2 PD  61 402n18 18 00 00 Bnd LFO2 Pitch Depth
+058 B L2 FD  62 402n19 19 00 00 Bnd LFO2 TVF Depth
+059 B L2 AD  63 402n1A 20 00 00 Bnd LFO2 TVA Depth
+060 C PITCH  64 402n20  2 40 00 Caf Pitch Ctl
+061 C CUTOF  65 402n21 16 40 00 Caf TVF Cutoff
+062 C AMPLI  66 402n22 24 40 00 Caf Amplitude Ctl
+063 C L1 RC  68 402n23 17 40 00 Caf LFO1 Rate Ctl
+064 C L1 PD  69 402n24 18 00 00 Caf LFO1 Pitch Depth
+065 C L1 FD  70 402n25 19 00 00 Caf LFO1 TVF Depth
+066 C L1 AD  71 402n26 20 00 00 Caf LFO1 TVA Depth
+067 C L2 RC  72 402n27 17 40 00 Caf LFO2 Rate Ctl
+068 C L2 PD  73 402n28 18 00 00 Caf LFO2 Pitch Depth
+069 C L2 FD  74 402n29 19 00 00 Caf LFO2 TVF Depth
+070 C L2 AD  75 402n2A 20 00 00 Caf LFO2 TVA Depth
+071 P PITCH  76 402n30  2 40 00 Paf Pitch Ctl
+072 P CUTOF  77 402n31 16 40 00 Paf TVF Cutoff
+073 P AMPLI  78 402n32 24 40 00 Paf Amplitude Ctl
+074 P L1 RC  80 402n33 17 40 00 Paf LFO1 Rate Ctl
+075 P L1 PD  81 402n34 18 00 00 Paf LFO1 Pitch Depth
+076 P L1 FD  82 402n35 19 00 00 Paf LFO1 TVF Depth
+077 P L1 AD  83 402n36 20 00 00 Paf LFO1 TVA Depth
+078 P L2 RC  84 402n37 17 40 00 Paf LFO2 Rate Ctl
+079 P L2 PD  85 402n38 18 00 00 Paf LFO2 Pitch Depth
+080 P L2 FD  86 402n39 19 00 00 Paf LFO2 TVF Depth
+081 P L2 AD  87 402n3A 20 00 00 Paf LFO2 TVA Depth
+082 1 PITCH  88 402n40  2 40 00 CC1 Pitch Ctl
+083 1 CUTOF  89 402n41 16 40 00 CC1 TVF Cutoff
+084 1 AMPLI  90 402n42 24 40 00 CC1 Amplitude Ctl
+085 1 L1 RC  92 402n43 17 40 00 CC1 LFO1 Rate Ctl
+086 1 L1 PD  93 402n44 18 00 00 CC1 LFO1 Pitch Depth
+087 1 L1 FD  94 402n45 19 00 00 CC1 LFO1 TVF Depth
+088 1 L1 AD  95 402n46 20 00 00 CC1 LFO1 TVA Depth
+089 1 L2 RC  96 402n47 17 40 00 CC1 LFO2 Rate Ctl
+090 1 L2 PD  97 402n48 18 00 00 CC1 LFO2 Pitch Depth
+091 1 L2 FD  98 402n49 19 00 00 CC1 LFO2 TVF Depth
+092 1 L2 AD  99 402n4A 20 00 00 CC1 LFO2 TVA Depth
+093 2 PITCH 100 402n50  2 40 00 CC2 Pitch Ctl
+094 2 CUTOF 101 402n51 16 40 00 CC2 TVF Cutoff
+095 2 AMPLI 102 402n52 24 40 00 CC2 Amplitude Ctl
+096 2 L1 RC 104 402n53 17 40 00 CC2 LFO1 Rate Ctl
+097 2 L1 PD 105 402n54 18 00 00 CC2 LFO1 Pitch Depth
+098 2 L1 FD 106 402n55 19 00 00 CC2 LFO1 TVF Depth
+099 2 L1 AD 107 402n56 20 00 00 CC2 LFO1 TVA Depth
+100 2 L2 RC 108 402n57 17 40 00 CC2 LFO2 Rate Ctl
+101 2 L2 PD 109 402n58 18 00 00 CC2 LFO2 Pitch Depth
+102 2 L2 FD 110 402n59 19 00 00 CC2 LFO2 TVF Depth
+103 2 L2 AD 111 402n5A 20 00 00 CC2 LFO2 TVA Depth

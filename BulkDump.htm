@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.0 Transitional//EN'>
+<HTML>
+  <HEAD>
+    <TITLE>SC-55 Bulk Dump</TITLE>
+    <STYLE TYPE="text/css">
+     BODY     {font-family:Arial;
+               background-color:#E8E8E8;}
+     H1       {font-family:Times New Roman;
+               font-size:40px;
+               color:red;
+              }
+     H2       {font-family:Sans Serif;
+               font-size:22pt;
+               color:"blue";
+               background-color:#E0E0FF;
+               margin-left:4%;
+              }
+     H3       {font-size:18pt;
+               color:'green';
+               background-color:#E0F8E0;
+               margin-left:8%;
+              }
+     H4       {font-size:12pt;
+               color:#F8E0F8;
+               background-color:#800080;
+               margin-left:12%;
+              }
+     H5       {font-size:10pt;
+               color:#000080;
+              }
+     P        {margin-left:12%;}
+     UL, OL   {margin-left:16%;}   
+     TABLE    {font-size:9pt;}
+     #red     {color:red;}
+     #green   {color:green;}
+    </STYLE>
+  </HEAD>
+  <BODY>
+     <CENTER>
+     <IMG SRC="./SC.gif" BORDER=2></IMG>
+     <H1>SC-55 SysEx Bulk Dump analyse & edit</H1>
+     </CENTER>
+     <H2>Description</H2>
+       <P>I had made a hundred pieces of music, each starting with a
+       System Exclusive bulkdump. Recording a bulkdump is a very
+       short and easy way, to insure oneself not to loose any of 
+       the changed sound canvas parameters. Dis-advantages of working
+       with dumps are : they consume memory; take a few bars, so a
+       piece of music cannot start at once; other sound modules cannot
+       read or receive the information. <BR>
+       In my case only a small percentage in the dump are non-default
+       values.
+       The first purpose of this program is to analyse a bulkdump,
+       look for those non-default values, generate alternative
+       short messages (= Standard Midi Language) and save them, so
+       they can replace the old dump.<BR>
+       While launching into the world of midi, I included some more
+       features like editing parameters, saving parts, print and
+       display dumps, read midi files...</P>
+       <P>The drumpatch section of the SC-55 dump isn't addressed by this
+       program for now. When you save edited dumps, the values of a previous
+       opened dump will be used.</P>
+       <P>For now, the program doesn't look very nice. There's nothing fancy
+       about it. Only the functionality was important in the current (beta) 
+       version. Maybe in the future I'll make a version pleasable to the eyes.
+       </P>
+
+     <H2>Menu</H2>
+
+      <H3>File</H3>
+        <H4>Midi</H4>
+          <P><B>Open</B> - 
+          This function reads midi files (*.mid). You can use it to check 
+          self-made midi files.
+          In this program you can save three kinds of midi files:</P>
+            <OL>
+              <LI> The edited SC-55 dump</LI>
+              <LI> The alternative for the dump</LI>
+	      <LI> A fade in/out sequence</LI>
+            </OL>
+          <P>They all use Standard Midi specification, FormatType 0, 
+          Single Track, any channel.</P>
+          <P><B>Play</B> - Play a midi file via html-EMBED.</P>
+
+        <H4>Dump</H4>
+          <P><B>Open</B> - 
+          This function loads a dump into memory. This dump is a single track 
+          midi file, recorded with your favorite midi sequencer (Cubase, 
+          CakeWalk,...) 
+          This is in fact the first thing to do, when your intentions are to edit 
+          and save dumps, never bother about alternatives etc. A <I>GSall.mid</I> 
+          file is provided containing an initial SC-55 dump with default values.</P>
+          <P><B>Save</B> - 
+          As discribed above, you should have started by opening a midi dump file, 
+          before this function is accessable.</P>
+          <P><B>Compare</B> - 
+          Compares the content of the current opened dump, with another. The 
+          result is a listing of values in the second file, bold, when they are 
+          unequal to those in the current opened dump.</P>
+
+        <H4>HTML</H4>
+          <P><B>Open</B> - Open any HTML file. Here included for viewing previously
+          saved results, namely dump texts.</P>
+          <P><B>Save</B> - Save the current HTML content.</P>
+
+        <H4>Part</H4>
+          <P><B>Open</B> - Overwrite a current part with the content of a 
+          previously saved part.</P>
+          <P><B>Save</B> - Save the parameters of one particular part.</P>
+
+        <H4>Exit</H4>
+          <P>When you're done, of course (ent meugd nog espe zie)</P>
+
+      <H3>Midi</H3>
+
+        <H4>Devices</H4>
+          <P>Here you can choose the desired midi in/out ports. You should choose 
+          MPU-401 ports to access the sound canvas.</P>
+
+        <H4>Close all ports</H4>
+          <P>The midi-thru, keyboard, mix and micro edit
+          functions can open midi ports. If you opened any of them, they will all 
+          be closed at once. Many midi drivers and sequencers won't allow you to 
+          open ports while they are active. In this case, before you launch your 
+          sequencer program, you close all ports here.</P>
+
+        <H4>Midi-Thru</H4>
+          <P>Provides access to an extern piano keyboard. You cannot change the 
+          channel this piano will play on, within this program. The only way to change 
+          the channel, is the hardware one if your piano has this function.</P>
+
+        <H4>Keyboard</H4>
+          <P>A software piano keyboard. Here you can play any chosen channel,
+          according to the current selected part (Mix & Micro Edit).</P>
+
+        <H4>Mix</H4>
+          <P>SC-55 Parts & All Editors<BR>
+          If wou want to edit your sound canvas settings directly, check
+          the <IMG SRC="midi.gif"> flag. This editor uses and alters the currently opened
+          dump values.<BR>
+          If you want to make sure that what you see is what you hear:
+		<UL>
+		  <LI>you have to play an existing dump, 
+                  open it in this program and start the editing.</LI>
+		  <LI>you have to record a dump containing the current sc55 settings
+		  with your sequencer, save it as a single track midi file,
+                  open it in this program and start the editing.</LI>
+            </UL>
+	    </P>
+  
+        <H4>Fade in/out seq</H4>
+        <P>Creates a fade in/out sequence, for selected parts only.</P>
+
+        <H4>Micro edit & save</H4>
+          <P>Edit and/or save parameters via System Exclusive Messages 
+          (long messages). You can save single SysEx messages in three ways: 
+          as a hexadicamal text, a decimal text (*.txt) or the command as 
+          it is (*.syx). This last format is known by Cubase, CakeWalk 
+          and others.<BR>
+          If wou want to edit your sound canvas settings directly, check
+          the <IMG SRC="midi.gif"> flag. This editor uses and alters the currently opened
+          dump values... .</P>
+       
+        <H4>GS Reset</H4>
+          <P>If a midi out port is open a SysEx command will reset your sound canvas 
+          to the default values. If no port is open, only a soft reset (the data in
+          our program) will occur.</P>
+      
+      <H3>Dump</H3>
+
+        <H4>HTML</H4>
+          <P>A few HTML text representations of the current dump can be 
+          generated here. Behind the scenes a <I>temp.htm</i> file in the
+          applications directory will hold the last generated text.</P>
+          <P><B>Hex</B> - Shows the contents of the dump in a 
+          hexadecimal representation. Non-defaults values are marked.</P>
+          <P><B>Dec</B> - Shows the contents of the dump in a 
+          decimal or proper representation. Non-defaults values are marked.</P>
+
+        <H4>Print</H4>
+          <P>Enables you to print your dump file. 
+          Non-defaults values are marked.</P>
+
+        <H4>Alternat</H4>
+          <P>Shows or saves alternatives for the current dump content. A GSreset 
+          plus all non-default values, only for those parts you use in the piece
+          of music, is mostly prefered above the huge actual dump.</P>
+
+
+     <H2>Questions</H2>
+	<P>Direct your questions to the following E-mail address.</P>
+	<P><A HREF="mailto:zatrix@load.com">zatrix@load.com</A></P>
+
+	<P>I have my own questions too. One is keeping me from going further
+        with this program. It would be nice to find someone who could help.
+        The problem is explained on the <A HREF="./SysEx.htm">SysEx.htm</A> page.</P>
+
+        <P>Another question is how to share midi ports between application.
+        It's a terrible nuisance when you cannot use 2 midi application at
+        the same time. Can this be solved?<BR><BR><BR></P>
+
+	<CENTER><SMALL>31 january 2000</SMALL></CENTER>
+
+
+  </BODY>
+</HTML>
+

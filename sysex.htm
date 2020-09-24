@@ -1,0 +1,174 @@
+<!doctype html public '-//w3c//dtd html 4.0 transitional//en'>
+<HTML>
+  <HEAD>
+     <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=windows-1252'>
+     <META NAME='description' CONTENT='SysEx problem'>
+     <STYLE>
+       <!--
+        {font-family: Courier New;
+            font-size: 10pt;}
+        .RM  {color: #008000};
+        .KW  {color: #000080};
+        //-->
+     </STYLE>
+     <TITLE>SysEx Problem</TITLE>
+  </HEAD>
+  <BODY BGCOLOR=#FFFFFF>
+     <P>
+      <SPAN CLASS='KW'>Option Explicit<BR>
+      <BR>
+      Public </SPAN>hMidiOUT <SPAN CLASS='KW'>As Long<BR>
+      Public </SPAN>mMPU401OUT <SPAN CLASS='KW'>As Long<BR>
+      <BR>
+      Public Const </SPAN>MAXPNAMELEN = 32&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  max product name length (including NULL)<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>MMSYSERR_NOERROR = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  no error<BR>
+      '  flags for dwFlags field of MIDIHDR structure<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>MHDR_DONE = &H1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  done bit<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>MHDR_PREPARED = &H2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  set if header prepared<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>MHDR_INQUEUE = &H4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  reserved for driver<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>MHDR_VALID = &H7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  valid flags / ;Internal /<BR>
+      '  flags used with midiOutOpen() to specify the type of the dwCallback parameter.<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>CALLBACK_NULL = &H0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  no callback<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>CALLBACK_WINDOW = &H10000&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>'  dwCallback is a HWND<BR>
+      </SPAN><SPAN CLASS='KW'>Public Const </SPAN>CALLBACK_FUNCTION = &H30000&nbsp;&nbsp;<SPAN CLASS='RM'>'  dwCallback is a FARPROC<BR>
+      <BR>
+      </SPAN>Type MIDIHDR<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lpData <SPAN CLASS='KW'>As String<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>dwBufferLength <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>dwBytesRecorded <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>dwUser <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>dwFlags <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>lpNext <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>Reserved <SPAN CLASS='KW'>As Long<BR>
+      End </SPAN>Type<BR>
+      Type MIDIOUTCAPS<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wMid <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>wPid <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>vDriverVersion <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>szPname <SPAN CLASS='KW'>As String </SPAN>* MAXPNAMELEN<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wTechnology <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>wVoices <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>wNotes <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>wChannelMask <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>dwSupport <SPAN CLASS='KW'>As Long<BR>
+      End </SPAN>Type<BR>
+      <BR>
+      Declare <SPAN CLASS='KW'>Function </SPAN>midiOutClose Lib "winmm.dll" (ByVal hMidiOUT <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutGetDevCaps Lib "winmm.dll" Alias "midiOutGetDevCapsA" (ByVal uDeviceID <SPAN CLASS='KW'>As Long</SPAN>, lpCaps <SPAN CLASS='KW'>As </SPAN>MIDIOUTCAPS, ByVal uSize <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutGetErrorText Lib "winmm.dll" Alias "midiOutGetErrorTextA" (ByVal err <SPAN CLASS='KW'>As Long</SPAN>, ByVal lpText <SPAN CLASS='KW'>As String</SPAN>, ByVal uSize <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutGetNumDevs Lib "winmm" () <SPAN CLASS='KW'>As Integer<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutLongMsg Lib "winmm.dll" (ByVal hMidiOUT <SPAN CLASS='KW'>As Long</SPAN>, lpMidiOutHdr <SPAN CLASS='KW'>As </SPAN>MIDIHDR, ByVal uSize <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutOpen Lib "winmm.dll" (lphMidiOut <SPAN CLASS='KW'>As Long</SPAN>, ByVal uDeviceID <SPAN CLASS='KW'>As Long</SPAN>, ByVal dwCallback <SPAN CLASS='KW'>As Long</SPAN>, ByVal dwInstance <SPAN CLASS='KW'>As Long</SPAN>, ByVal dwFlags <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutPrepareHeader Lib "winmm.dll" (ByVal hMidiOUT <SPAN CLASS='KW'>As Long</SPAN>, lpMidiOutHdr <SPAN CLASS='KW'>As </SPAN>MIDIHDR, ByVal uSize <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutUnprepareHeader Lib "winmm.dll" (ByVal hMidiOUT <SPAN CLASS='KW'>As Long</SPAN>, lpMidiOutHdr <SPAN CLASS='KW'>As </SPAN>MIDIHDR, ByVal uSize <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      </SPAN>Declare <SPAN CLASS='KW'>Function </SPAN>midiOutReset Lib "winmm.dll" (ByVal hMidiOUT <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As Long<BR>
+      <HR>
+      </SPAN><SPAN CLASS='RM'>' looking for the right device ID (Roland MPU-401)<BR>
+      </SPAN><SPAN CLASS='KW'>Private Function </SPAN>FindMPU401OUT() <SPAN CLASS='KW'>As Boolean<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>I <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>NumDevsOut <SPAN CLASS='KW'>As Integer<BR>
+      &nbsp;&nbsp;&nbsp;Dim Name As String<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>DevO <SPAN CLASS='KW'>As </SPAN>MIDIOUTCAPS<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Dim </SPAN>midiError <SPAN CLASS='KW'>As Long<BR>
+      <BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>NumDevsOut = midiOutGetNumDevs()<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>For </SPAN>I = 0 <SPAN CLASS='KW'>To </SPAN>NumDevsOut - 1<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;midiError = midiOutGetDevCaps(I, DevO, 52)<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>ShowMMerr "midiOutGetDevCaps", midiError<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Exit Function<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End If<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name </SPAN>= <SPAN CLASS='KW'>Left</SPAN>(DevO.szPname, <SPAN CLASS='KW'>InStr</SPAN>(1, DevO.szPname, <SPAN CLASS='KW'>Chr</SPAN>(0)) - 1)<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If InStr</SPAN>(1, <SPAN CLASS='KW'>Name</SPAN>, "MPU-401") > 0 <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>mMPU401OUT = I<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FindMPU401OUT = True<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Exit For<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End If<BR>
+      &nbsp;&nbsp;&nbsp;Next </SPAN>I<BR>
+      <SPAN CLASS='KW'>End Function<BR>
+      <HR>
+      </SPAN><SPAN CLASS='RM'>' making the SyxEx message for SC55<BR>
+      </SPAN><SPAN CLASS='KW'>Private Function </SPAN>makeComStr(ByVal Address <SPAN CLASS='KW'>As String</SPAN>, ByVal value <SPAN CLASS='KW'>As Long</SPAN>) <SPAN CLASS='KW'>As String<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>I <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>B(10) <SPAN CLASS='KW'>As Byte</SPAN>, data <SPAN CLASS='KW'>As String<BR>
+      &nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(0) = &HF0<BR>
+      &nbsp;&nbsp;&nbsp;B(1) = &H41 <SPAN CLASS='RM'>' ManuID roland<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(2) = &H10 <SPAN CLASS='RM'>' DeviceID<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(3) = &H42 <SPAN CLASS='RM'>' GS<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(4) = &H12 <SPAN CLASS='RM'>' data set 1<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(5) = <SPAN CLASS='KW'>Val</SPAN>("&H" & <SPAN CLASS='KW'>Left</SPAN>(Address, 2))<BR>
+      &nbsp;&nbsp;&nbsp;B(6) = <SPAN CLASS='KW'>Val</SPAN>("&H" & <SPAN CLASS='KW'>Mid</SPAN>(Address, 3, 2))<BR>
+      &nbsp;&nbsp;&nbsp;B(7) = <SPAN CLASS='KW'>Val</SPAN>("&H" & <SPAN CLASS='KW'>Right</SPAN>(Address, 2))<BR>
+      &nbsp;&nbsp;&nbsp;B(8) = value<BR>
+      &nbsp;&nbsp;&nbsp;B(9) = 0 <SPAN CLASS='RM'>' checksum<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>B(10) = &HF7<BR>
+      &nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>' make checksum<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN><SPAN CLASS='KW'>For </SPAN>I = 5 <SPAN CLASS='KW'>To </SPAN>8: B(9) = <SPAN CLASS='KW'>CByte</SPAN>((<SPAN CLASS='KW'>CInt</SPAN>(B(9)) + <SPAN CLASS='KW'>CInt</SPAN>(B(I))) <SPAN CLASS='KW'>Mod </SPAN>255): <SPAN CLASS='KW'>Next </SPAN>I<BR>
+      &nbsp;&nbsp;&nbsp;B(9) = -B(9) <SPAN CLASS='KW'>And </SPAN>127<BR>
+      &nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='RM'>' make data string<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN><SPAN CLASS='KW'>For </SPAN>I = 0 <SPAN CLASS='KW'>To </SPAN>10: data = data & <SPAN CLASS='KW'>Chr</SPAN>(B(I)): <SPAN CLASS='KW'>Next </SPAN>I<BR>
+      &nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;makeComStr = data<BR>
+      <SPAN CLASS='KW'>End Function<BR>
+      <HR>
+      Public Sub </SPAN>SendSyxEx()<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Dim </SPAN>midiError <SPAN CLASS='KW'>As Long<BR>
+      &nbsp;&nbsp;&nbsp;Dim </SPAN>mh <SPAN CLASS='KW'>As </SPAN>MIDIHDR<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Dim </SPAN>mTime <SPAN CLASS='KW'>As Single</SPAN>, Timeout <SPAN CLASS='KW'>As Boolean<BR>
+      &nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>FindMPU401OUT<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>hMidiOUT = 0 <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>midiError = midiOutOpen(hMidiOUT, mMPU401OUT, 0, 0, CALLBACK_NULL)<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>ShowMMerr "midiOutOpen", midiError<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Exit Sub<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End If<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End If<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>mh.lpData = makeComStr("400004", 111) <SPAN CLASS='RM'>' set master volume to 111<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>mh.dwBufferLength = <SPAN CLASS='KW'>Len</SPAN>(mh.lpData)<BR>
+      &nbsp;&nbsp;&nbsp;mh.dwFlags = 0<BR>
+      &nbsp;&nbsp;&nbsp;midiError = midiOutPrepareHeader(hMidiOUT, mh, 24 + mh.dwBufferLength)<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>ShowMMerr "midiOutPrepareHeader", midiError<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Else<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>midiError = midiOutLongMsg(hMidiOUT, mh, 24 + mh.dwBufferLength)<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>ShowMMerr "midiOutLongMsg", midiError<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Else<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN CLASS='RM'>' normaly the code here should be<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' While mh.dwFlags <> MHDR_DONE: DoEvents: Wend<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' since the mh.dwFlags isn't set to MHDR_DONE by the driver<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' I wait and set it myself<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>mTime = <SPAN CLASS='KW'>Timer</SPAN>: Timeout = False<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>While </SPAN>mh.dwFlags <> MHDR_DONE <SPAN CLASS='KW'>And </SPAN>Timeout = False<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If Timer </SPAN>- mTime > 0.5 <SPAN CLASS='KW'>Then </SPAN>Timeout = True<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>DoEvents<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wend<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If </SPAN>Timeout = True <SPAN CLASS='KW'>Then </SPAN>mh.dwFlags = MHDR_DONE<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>End If<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>midiError = midiOutUnprepareHeader(hMidiOUT, mh, 24 + mh.dwBufferLength)<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then </SPAN>ShowMMerr "midiOutUnprepareHeader", midiError<BR>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>End If<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>midiError = midiOutClose(hMidiOUT)<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>If </SPAN>midiError <> MMSYSERR_NOERROR <SPAN CLASS='KW'>Then </SPAN>ShowMMerr "midiOutClose", midiError<BR>
+      <SPAN CLASS='KW'>End Sub<BR>
+      <HR>
+      Private Sub </SPAN>ShowMMerr(ByVal ErrIn <SPAN CLASS='KW'>As String</SPAN>, ByVal MMerr <SPAN CLASS='KW'>As Long</SPAN>)<BR>
+      &nbsp;&nbsp;&nbsp;<SPAN CLASS='KW'>Dim </SPAN>msg <SPAN CLASS='KW'>As String<BR>
+      &nbsp;&nbsp;&nbsp;</SPAN>msg = <SPAN CLASS='KW'>String</SPAN>(255, " ")<BR>
+      &nbsp;&nbsp;&nbsp;midiOutGetErrorText MMerr, msg, 255<BR>
+      &nbsp;&nbsp;&nbsp;MsgBox msg, vbOKOnly, ErrIn<BR>
+      <SPAN CLASS='KW'>End Sub<BR>
+      <BR>
+      </SPAN>
+
+     </P>
+  </BODY>
+</HTML>
